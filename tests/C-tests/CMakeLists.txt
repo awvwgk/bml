@@ -37,7 +37,7 @@ bml_add_typed_library(bmltests double_real "${SOURCES_TYPED}")
 bml_add_typed_library(bmltests single_complex "${SOURCES_TYPED}")
 bml_add_typed_library(bmltests double_complex "${SOURCES_TYPED}")
 
-add_library(bmltests
+add_library(bmltests STATIC
   $<TARGET_OBJECTS:bmltests-single_real>
   $<TARGET_OBJECTS:bmltests-double_real>
   $<TARGET_OBJECTS:bmltests-single_complex>
@@ -221,7 +221,9 @@ if(ADDR2LINE)
     # this test not very useful unfortunately.
     PASS_REGULAR_EXPRESSION "test_backtrace.c:6[\\n]*.*test_backtrace.c:12;[?]+:[0?]")
 else()
-  set_tests_properties(backtrace
-    PROPERTIES
-    PASS_REGULAR_EXPRESSION "test-backtrace[(]foo.*[\\n]*.*test-backtrace[(]main;[?]+:[0?]")
+  if(NOT APPLE)
+    set_tests_properties(backtrace
+      PROPERTIES
+      PASS_REGULAR_EXPRESSION "test-backtrace[(]foo.*[\\n]*.*test-backtrace[(]main;[?]+:[0?]")
+  endif()
 endif()
